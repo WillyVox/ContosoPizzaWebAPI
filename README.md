@@ -95,4 +95,70 @@ ContosoPizza.http	  Contains configuration to test REST APIs directly from Visua
         - Test: $ http://localhost:5045/pizza/1
     7. Optional: Test the controller with Command Line HTTP Read-Eval-Print Loop (REPL) 
         [https://learn.microsoft.com/en-gb/training/modules/build-web-api-aspnet-core/6-exercise-add-controller]
-        
+
+### CRUD actions in ASP.NET Core
+    Our pizza service supports CRUD operations for a list of pizzas. These operations are performed through HTTP verbs, which are mapped via ASP.NET Core attributes. As you saw, the HTTP GET verb is used to retrieve one or more items from a service. Such an action is annotated with the [HttpGet] attribute.
+
+    The following table shows the mapping of the four operations that you're implementing for the pizza service:
+
+    HTTP action verb	CRUD operation	    ASP.NET Core attribute
+        GET	            Read	            [HttpGet]
+        POST	        Create	            [HttpPost]
+        PUT	            Update	            [HttpPut]
+        DELETE	        Delete	            [HttpDelete]
+
+    1. POST
+        [HttpPost]
+        public IActionResult Create(Pizza pizza)
+        {            
+            // This code will save the pizza and return a result
+        }
+    2. PUT
+        [HttpPut("{id}")]
+        public IActionResult Update(int id, Pizza pizza)
+        {
+            // This code will update the pizza and return a result
+        }
+    3. DELETE
+        [HttpDelete("{id}")]
+        public IActionResult Delete(int id)
+        {
+            // This code will delete the pizza and return a result
+        }
+### Add a pizza
+    Let's enable a pizza to be added through the web API by using a POST method.
+
+    Replace the // POST action comment in Controllers/PizzaController.cs with the following code:
+    [HttpPost]
+    public IActionResult Create(Pizza pizza)
+    {            
+        PizzaService.Add(pizza);
+        return CreatedAtAction(nameof(Get), new { id = pizza.Id }, pizza);
+    }
+### Modify a pizza
+    Now, let's enable a pizza to be updated through the web API by using a PUT method.
+
+    Replace the // PUT action comment in Controllers/PizzaController.cs with the following code:
+
+### Remove a pizza
+    Finally, let's enable a pizza to be removed through the web API by using a DELETE method.
+
+    Replace the // DELETE action comment in Controllers/PizzaController.cs with the following code:
+
+### Test the finished web API with Command Line HTTPREPL
+    $ httprepl http://localhost:5045
+    $ connect http://localhost:5045
+    $ cd Pizza
+    $ ls
+    Post a new pizza: 
+        $ post -c "{"name":"Hawaii", "isGlutenFree":false}"
+    Put pizza 3
+        $ put 3 -c  "{"id": 3, "name":"Willy Vox", "isGlutenFree":false}"
+    Get pizza 3
+        $ get 3
+    Delete pizza 3
+        $ delete 3
+    Verify
+        $ get (to view all pizzas)
+### Test the finished web API with HTTP files
+    [https://learn.microsoft.com/en-gb/training/modules/build-web-api-aspnet-core/8-exercise-implement-crud]
